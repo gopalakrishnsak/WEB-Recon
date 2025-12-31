@@ -52,11 +52,12 @@
 git clone https://github.com/gopalakrishnsak/WEB-Recon.git
 cd WEB-Recon
 pip install -r requirements.txt
-sudo mv dist/WEB-Info /usr/local/bin/web-info
 
-Now  You Can use it 
+for kali try this 
+pipx install -r requirements.txt
+python3 webrecon.py
 
-web-info
+
 
 
 
