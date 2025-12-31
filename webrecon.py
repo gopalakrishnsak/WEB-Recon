@@ -137,15 +137,32 @@ def website_info():
 
 def dns_info():
     output.delete(1.0, tk.END)
-    domain = entry.get().replace("https://","").replace("http://","")
+    domain = entry.get().replace("https://","").replace("http://","").strip()
+
+    record_types = ["A","MX","NS","TXT","CAA","SOA","HTTPS"]
+
+    for t in record_types:
+        output.insert(tk.END, f"\n{t} Records:\n")
+        try:
+            answers = dns.resolver.resolve(domain, t)
+            for r in answers:
+                output.insert(tk.END, f"  {r}\n")
+        except dns.resolver.NoAnswer:
+            output.insert(tk.END, "  No records found\n")
+        except dns.resolver.NXDOMAIN:
+            output.insert(tk.END, "  Domain does not exist\n")
+            return
+        except dns.exception.Timeout:
+            output.insert(tk.END, "  Query timed out\n")
+        except Exception as e:
+            output.insert(tk.END, f"  Error: {e}\n")
+
+    output.insert(tk.END, "\nWHOIS Information:\n")
     try:
-        for t in ["A","MX","NS","TXT","CAA","SOA","HTTPS"]:
-            output.insert(tk.END, f"\n{t} Records:\n")
-            for r in dns.resolver.resolve(domain, t):
-                output.insert(tk.END, str(r)+"\n")
-        output.insert(tk.END, f"\nWHOIS:\n{whois.whois(domain)}")
+        w = whois.whois(domain)
+        output.insert(tk.END, str(w))
     except Exception as e:
-        output.insert(tk.END, str(e))
+        output.insert(tk.END, f"WHOIS Error: {e}\n")
 
 
 def ip_ports():
