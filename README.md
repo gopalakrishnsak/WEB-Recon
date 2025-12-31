@@ -57,9 +57,5 @@ for kali try this
 pipx install -r requirements.txt
 python3 webrecon.py
 
-
-
-
-
 NOTE:must use https:// or http://
 EX: https://domain.con
